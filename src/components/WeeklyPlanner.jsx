@@ -74,6 +74,7 @@ export default function WeeklyPlanner({
           const { total, percent, completedSets, totalSets } = getCompletionStats(dayData);
           const isToday = day === todayName;
           const isActive = day === activeDay;
+          const isRest = focus.trim().toLowerCase() === 'rest day';
 
           return (
             <div 
@@ -96,24 +97,21 @@ export default function WeeklyPlanner({
                 </button>
               </div>
 
-              {/* Day focus dropdown selection (No typing needed!) */}
+              {/* Day focus input with suggestions (Allows custom multiple parts!) */}
               <div className="focus-select-wrapper" onClick={(e) => e.stopPropagation()}>
-                <select
+                <input
+                  type="text"
                   value={focus}
                   onChange={(e) => onChangeFocus(day, e.target.value)}
-                  className={`focus-select ${focus === 'Rest Day' ? 'select-rest' : 'select-work'}`}
-                >
-                  {BODY_PARTS.map((part) => (
-                    <option key={part} value={part}>
-                      {part}
-                    </option>
-                  ))}
-                </select>
+                  className={`focus-input ${isRest ? 'input-rest' : 'input-work'}`}
+                  placeholder="e.g. Chest & Triceps"
+                  list="focus-options"
+                />
               </div>
 
               {/* Exercise stats and progress */}
               <div className="day-card-body">
-                {focus === 'Rest Day' ? (
+                {isRest ? (
                   <div className="rest-day-message">
                     <span>Rest & Recover</span>
                   </div>
@@ -147,13 +145,30 @@ export default function WeeklyPlanner({
 
               <div className="day-card-footer">
                 <span className="action-link flex-center">
-                  {focus === 'Rest Day' ? 'Configure' : 'Log / Edit'} <ChevronRight size={14} />
+                  {isRest ? 'Configure' : 'Log / Edit'} <ChevronRight size={14} />
                 </span>
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* Datalist of suggestions for focus */}
+      <datalist id="focus-options">
+        <option value="Chest & Triceps" />
+        <option value="Back & Biceps" />
+        <option value="Legs & Core" />
+        <option value="Shoulders & Arms" />
+        <option value="Chest & Back" />
+        <option value="Chest" />
+        <option value="Back" />
+        <option value="Legs" />
+        <option value="Shoulders" />
+        <option value="Arms" />
+        <option value="Core" />
+        <option value="Cardio" />
+        <option value="Rest Day" />
+      </datalist>
     </div>
   );
 }

@@ -18,7 +18,42 @@ export default function ExerciseLogger({
   const exercises = dayData?.exercises || [];
 
   // Get options for preset exercises based on current day's focus
-  const presetOptions = PRESET_EXERCISES[focus] || [];
+  const getPresetOptions = (dayFocus) => {
+    if (!dayFocus) return [];
+    
+    // Split on &, +, or comma
+    const parts = dayFocus.split(/[&+,]/).map(p => p.trim());
+    const allPresets = new Set();
+    
+    parts.forEach(part => {
+      let normalizedPart = part.toLowerCase();
+      // Map synonyms to match keys in PRESET_EXERCISES
+      if (normalizedPart.includes('bicep') || normalizedPart.includes('tricep') || normalizedPart.includes('arm')) {
+        normalizedPart = 'arms';
+      }
+      
+      const matchingKey = Object.keys(PRESET_EXERCISES).find(
+        key => key.toLowerCase() === normalizedPart
+      );
+      
+      if (matchingKey && PRESET_EXERCISES[matchingKey]) {
+        PRESET_EXERCISES[matchingKey].forEach(ex => allPresets.add(ex));
+      }
+    });
+    
+    // Fallback: if nothing matched, check if any preset key is a substring of the focus
+    if (allPresets.size === 0) {
+      Object.keys(PRESET_EXERCISES).forEach(key => {
+        if (dayFocus.toLowerCase().includes(key.toLowerCase())) {
+          PRESET_EXERCISES[key].forEach(ex => allPresets.add(ex));
+        }
+      });
+    }
+    
+    return Array.from(allPresets);
+  };
+
+  const presetOptions = getPresetOptions(focus);
 
   const handleAddPreset = (e) => {
     e.preventDefault();
@@ -98,7 +133,7 @@ export default function ExerciseLogger({
     }
   }, [showCelebration]);
 
-  if (focus === 'Rest Day') {
+  if (focus.trim().toLowerCase() === 'rest day') {
     return (
       <div className="logger-panel glass-panel text-center p-5">
         <Dumbbell size={48} className="text-muted mb-3 mx-auto" />

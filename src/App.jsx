@@ -85,7 +85,8 @@ export default function App() {
     if (!currentUsername || !userData) return;
 
     // Reset exercises if changing to Rest Day
-    const newExercises = newFocus === 'Rest Day' ? [] : userData.schedule[day]?.exercises || [];
+    const isRest = newFocus.trim().toLowerCase() === 'rest day';
+    const newExercises = isRest ? [] : userData.schedule[day]?.exercises || [];
 
     const updatedData = {
       ...userData,

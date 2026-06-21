@@ -121,12 +121,12 @@ export default function Dashboard({
             <div className="today-body">
               <div className="focus-display">
                 <span className="focus-title">Planned Focus</span>
-                <span className={`focus-value ${todaySchedule.focus === 'Rest Day' ? 'text-muted' : 'text-primary-glow'}`}>
+                <span className={`focus-value ${todaySchedule.focus.trim().toLowerCase() === 'rest day' ? 'text-muted' : 'text-primary-glow'}`}>
                   {todaySchedule.focus}
                 </span>
               </div>
 
-              {todaySchedule.focus !== 'Rest Day' && (
+              {todaySchedule.focus.trim().toLowerCase() !== 'rest day' && (
                 <div className="today-exercise-summary">
                   <strong>Exercises planned:</strong> {todaySchedule.exercises?.length || 0}
                   <ul className="mini-exercise-list">
@@ -146,7 +146,7 @@ export default function Dashboard({
                 className="btn btn-primary btn-full flex-center"
                 onClick={() => onNavigateToTab('planner', todayName)}
               >
-                {todaySchedule.focus === 'Rest Day' ? 'Configure Weekly Schedule' : 'Start Logging Workout'}
+                {todaySchedule.focus.trim().toLowerCase() === 'rest day' ? 'Configure Weekly Schedule' : 'Start Logging Workout'}
               </button>
             </div>
           </div>
