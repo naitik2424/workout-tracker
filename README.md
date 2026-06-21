@@ -4,7 +4,7 @@ A premium, modern React + Vite web application to plan, log, and analyze your wo
 
 ---
 
-## 🚀 How to Run the App (आसानी से शुरू करें)
+## 🚀 How to Run the App 
 
 We have created a double-clickable shortcut file to run this app on Windows without writing any commands!
 
